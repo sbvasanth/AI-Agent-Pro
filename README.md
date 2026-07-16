@@ -175,6 +175,13 @@ The AI Agent can
 
 # 📸 Screenshots
 
+## Conversation Memory
+
+![Search](screenshots/memory.png)
+
+---
+
+
 ## System tools
 
 ![Search](screenshots/DateAndTime.png)
@@ -187,6 +194,10 @@ The AI Agent can
 ![Search](screenshots/RAG2.png)
 
 ---
+
+NOTE:- When ran "streamlit run streamlit_app.py", if you found Groq API key limit as an Error, Kindly remove or delete the chat_memory.db, so the limit decreases. and Assistant work as expected.
+
+
 # 🤝 Contributing
 
 Pull requests are welcome.
