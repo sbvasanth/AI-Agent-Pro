@@ -175,10 +175,18 @@ The AI Agent can
 
 # 📸 Screenshots
 
-Coming Soon
+## System tools
+
+![Search](screenshots/DateAndTime.png)
 
 ---
+## RAG
 
+![Search](screenshots/RAG.png)
+
+![Search](screenshots/RAG2.png)
+
+---
 # 🤝 Contributing
 
 Pull requests are welcome.
