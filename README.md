@@ -181,7 +181,6 @@ The AI Agent can
 
 ---
 
-
 ## System tools
 
 ![Search](screenshots/DateAndTime.png)
