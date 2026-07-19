@@ -4,8 +4,14 @@ from streamlit_folium import st_folium
 
 from src.chat.chat_service import get_ai_response
 from src.tools.maps_tool import get_route
-from src.tools.speech_tool import speech
+# from src.tools.speech_tool import speech
 
+from src.tools.voice import voice_supported
+
+SPEECH_AVAILABLE = voice_supported()
+
+if SPEECH_AVAILABLE:
+    from src.tools.speech_tool import speech
 
 # ---------------------------------------------------
 # Display Route on Map
@@ -67,57 +73,65 @@ st.caption("Powered by LangGraph • Groq • RAG • Maps • Memory")
 # ---------------------------------------------------
 with st.sidebar:
 
-    st.header("🎤 Voice Assistant")
+    if SPEECH_AVAILABLE:
 
-    voice_enabled = st.toggle(
-        "Enable Voice",
-        value=True,
-    )
+        st.header("🎤 Voice Assistant")
 
-    speed = st.slider(
-        "Speech Speed",
-        min_value=100,
-        max_value=250,
-        value=170,
-        step=5,
-        help="Higher = Faster",
-    )
+        voice_enabled = st.toggle(
+            "Enable Voice",
+            value=True,
+        )
 
-    volume = st.slider(
-        "Volume",
-        min_value=0,
-        max_value=100,
-        value=100,
-        step=5,
-    )
+        speed = st.slider(
+            "Speech Speed",
+            min_value=100,
+            max_value=250,
+            value=170,
+            step=5,
+            help="Higher = Faster",
+        )
 
-    # speech.set_speed(speed)
-    # speech.set_volume(volume / 100)
-    # ------------------------------------------------------
-    if speed != speech.rate:
-        speech.set_speed(speed)                         
-            # added 
-    if (volume / 100) != speech.volume:
-        speech.set_volume(volume / 100)
-    # ------------------------------------------------------
+        volume = st.slider(
+            "Volume",
+            min_value=0,
+            max_value=100,
+            value=100,
+            step=5,
+        )
 
-    st.divider()
+        if speed != speech.rate:
+            speech.set_speed(speed)
 
-    col1, col2 = st.columns(2)
+        if (volume / 100) != speech.volume:
+            speech.set_volume(volume / 100)
 
-    with col1:
+        st.divider()
 
-        if st.button("▶ Test"):
+        col1, col2 = st.columns(2)
 
-            speech.speak(
-                "Hello! I am your AI Assistant."
-            )
+        with col1:
 
-    with col2:
+            if st.button("▶ Test"):
 
-        if st.button("⏹ Stop"):
+                speech.speak(
+                    "Hello! I am your AI Assistant."
+                )
 
-            speech.stop()
+        with col2:
+
+            if st.button("⏹ Stop"):
+
+                speech.stop()
+
+    else:
+
+        voice_enabled = False
+
+        st.header("🎤 Voice Assistant")
+
+        st.info(
+            "Voice responses are available only in the Windows desktop version."
+        )
 
     st.divider()
 
@@ -133,7 +147,7 @@ This assistant supports:
 
 ✅ Web Search
 
-✅ Voice Responses
+✅ Voice Responses (Desktop)
 """
     )
 
@@ -225,7 +239,8 @@ if prompt:
 
                 display_route(route)
 
-            if voice_enabled:
+            if SPEECH_AVAILABLE and voice_enabled:
+
                 speech.speak(
                     f"Route from {route['origin']} to "
                     f"{route['destination']}. "
@@ -268,7 +283,7 @@ if prompt:
 
             st.write(answer)
 
-        if voice_enabled:
+        if SPEECH_AVAILABLE and voice_enabled:
 
             speech.speak(answer)
 
