@@ -29,6 +29,6 @@ steps:
   displayName: 'Compile project'
 
 - script: |
-    python -m pytest
-  displayName: 'Run tests'
-  continueOnError: true
+    python -m pytest tests/unit
+  displayName: 'Run unit tests'
+  continueOnError: false 
