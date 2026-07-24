@@ -9,36 +9,82 @@ variables:
 
 steps:
 
+# ---------------------------------------
+# Install Python
+# ---------------------------------------
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '$(pythonVersion)'
   displayName: 'Use Python $(pythonVersion)'
 
+# ---------------------------------------
+# Upgrade pip
+# ---------------------------------------
 - script: |
     python -m pip install --upgrade pip
+  displayName: 'Upgrade pip'
+
+# ---------------------------------------
+# Install dependencies
+# ---------------------------------------
+- script: |
     pip install -r requirements.txt
   displayName: 'Install dependencies'
 
+# ---------------------------------------
+# Verify installation
+# ---------------------------------------
 - script: |
     python --version
     pip --version
   displayName: 'Verify Python'
 
-- script: |
-    python -m compileall .
-  displayName: 'Compile project'
-
+# ---------------------------------------
 # Check formatting
+# ---------------------------------------
 - script: |
     black --check .
-  displayName: "Check code formatting"
+  displayName: 'Check code formatting'
 
+# ---------------------------------------
 # Run Ruff
+# ---------------------------------------
 - script: |
     ruff check .
-  displayName: "Run Ruff"
+  displayName: 'Run Ruff Linter'
 
+# ---------------------------------------
+# Compile source
+# ---------------------------------------
 - script: |
-    python -m pytest tests/unit
-  displayName: 'Run unit tests'
-  continueOnError: false 
+    python -m compileall src
+  displayName: 'Compile Project'
+
+# ---------------------------------------
+# Run Unit Tests with Coverage
+# ---------------------------------------
+- script: |
+    python -m pytest tests/unit \
+      --cov=src \
+      --cov-report=term-missing \
+      --cov-report=xml \
+      --cov-fail-under=10
+  displayName: 'Run Unit Tests with Coverage'
+
+# ---------------------------------------
+# Publish Code Coverage
+# ---------------------------------------
+- task: PublishCodeCoverageResults@2
+  displayName: 'Publish Code Coverage'
+
+  inputs:
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage.xml'
+
+# ---------------------------------------
+# Build Complete
+# ---------------------------------------
+- script: |
+    echo "==========================================="
+    echo " AI-Agent-Pro Build Successful"
+    echo "==========================================="
+  displayName: 'Build Complete'
