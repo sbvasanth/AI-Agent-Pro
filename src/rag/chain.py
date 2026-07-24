@@ -1,5 +1,8 @@
-from src.llm import llm
+from src.llm import get_llm
+
 from src.rag.retriever import retriever
+
+llm = get_llm()
 
 
 def ask_pdf(question):

@@ -4,13 +4,14 @@ from src.tools.web_search_tool import web_search
 from src.prompts.system_prompt import SYSTEM_PROMPT
 from src.tools.maps_tool import get_route
 
-from src.llm import llm
-
+from src.llm import get_llm
 from src.tools.math_tools import multiply, add, subtract, divide
 
 from src.tools.file_tools import read_file, find_file
 
 from src.tools.system_tools import current_time
+
+llm = get_llm()
 
 
 def create_chat_agent(checkpointer):
